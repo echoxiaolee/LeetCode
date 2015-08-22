@@ -195,7 +195,7 @@ string addBinary(string a, string b)
 }
 
 
-//Given two strings s and t, determine if they are isomorphic.
+//Given two strings s and t, determine if they are isomorphic(同构的；同形的).
 bool isIsomorphic(string s, string t) 
 {
 	if (s.length() != t.length())return false;
@@ -216,6 +216,71 @@ bool isIsomorphic(string s, string t)
 	if (ss != t||tt!=s)return false;
 	else return true;
 }
+
+
+//Given two strings s and t, write a function to determine if t is an anagram(回文构词法) of s.
+//For example,
+//s = "anagram", t = "nagaram", return true.
+//s = "rat", t = "car", return false.
+bool isAnagram(string s, string t) 
+{
+	if (s.length() != t.length())return false;
+	int arr[128] = { 0 }, brr[128] = {0};
+	for (string::const_iterator ss = s.begin(),tt=t.begin();\
+		ss != s.end(),tt!=t.end(); ss++,tt++)
+	{
+		arr[*ss]++;
+		brr[*tt]++;
+	}
+	for (size_t i = 'a'; i != 'z' + 1; i++)
+	{
+		if (arr[i] != brr[i])return false;
+	}
+	return true;
+}
+
+//The count - and - say sequence is the sequence of integers beginning as follows :
+//1, 11, 21, 1211, 111221, ...
+//1 is read off as "one 1" or 11.
+//11 is read off as "two 1s" or 21.
+//21 is read off as "one 2, then one 1" or 1211.
+//Given an integer n, generate the n-th sequence.
+string countAndSay(int n)
+{
+	if (n <= 0)return string();
+	if (n == 1)return string("1");
+	if (n == 2)return string("11");
+	string str = countAndSay(n - 1);
+	string res;
+	int cnt = 1;
+	for (string::const_iterator it = str.begin()+1; it != str.end(); it++)
+	{
+		if (*it == *(it - 1))cnt++;
+		else
+		{
+			res.append(to_string(cnt));
+			res.append(1,*(it - 1));
+			cnt = 1;
+		}
+	}
+	res.append(to_string(cnt));
+	res.append(1, str.back());
+	return res;
+}
+
+//Returns the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack. 
+int strStr(string haystack, string needle) {
+	if (needle.length()> haystack.length())return -1;
+	if (haystack == needle)return 0;
+	int len = needle.length();
+	for (string::iterator it = haystack.begin(); it != haystack.end(); it++)
+	{
+		size_t dis = distance(haystack.begin(), it);
+		if (haystack.substr(dis, len) == needle)return dis;
+	}
+	return -1;
+}
+
 //Given n pairs of parentheses, write a function to generate all combinations of 
 //well-formed parentheses
 //vector<string> generateParenthesis(int n)

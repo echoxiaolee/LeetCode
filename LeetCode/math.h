@@ -670,7 +670,7 @@ uint32_t reverseBits(uint32_t n)
 int climbStairs(int n)
 {
 	if (n <= 0)return 0;
-	return (pow((1 + sqrt(5)) / 2, n + 1) - pow((1 - sqrt(5)) / 2, n + 1)) / sqrt(5);
+	return (int)((pow((1 + sqrt(5)) / 2, n + 1) - pow((1 - sqrt(5)) / 2, n + 1)) / sqrt(5));
 }
 
 int climbStairs2(int n)
@@ -746,4 +746,158 @@ string getPermutation(int n, int k)
 	return str;
 }
 
+//Given a non-negative integer num, repeatedly add all its digits until the result has only one digit. 
+int addDigits(int num) 
+{
+	if (num < 0)num *= -1;
+	int res = num;
+	int sum = 0;
+	while (res > 0)
+	{
+		sum += res % 10;
+		res /= 10;
+		if (res == 0&&sum>=10)
+		{
+			res = sum;
+			sum = 0;
+		}
+	}
+	return sum;
+}
+
+
+//Ugly numbers are positive numbers whose prime factors only include 2, 3, 5. For example, 6, 8 are ugly while 14 is not ugly since it includes another prime factor 7.
+//Note that 1 is typically treated as an ugly number.
+bool isUgly(int num)
+{
+	if (num <= 0)return false;
+	while (num % 2 == 0&&num!=0)num /= 2;
+	while (num % 3 == 0 && num != 0)num /= 3;
+	while (num % 5 == 0 && num != 0)num /= 5;
+	if (num == 1)return true;
+	else return false;
+}
+
+//Write a program to find the n - th ugly number.
+//Ugly numbers are positive numbers whose prime factors only include 2, 3, 5. For example, 1, 2, 3, 4, 5, 6, 8, 9, 10, 12 is the sequence of the first 10 ugly numbers.
+//Note that 1 is typically treated as an ugly number.
+int nthUglyNumber(int n) 
+{
+	int cnt = 1;
+	int num = 1;
+	while (cnt <= n)
+	{
+		if (isUgly(num))
+		{
+			cnt++;
+		}
+		num++;
+	}
+	return num-1;
+}
+
+int nthUglyNumber2(int n)
+{
+	if (n < 7)return n;
+	vector<int>vec(n,1);
+	int c2 = 0, c3 = 0, c5 = 0;
+	for (size_t i = 1; i != n; i++)
+	{
+		vec[i] = vec[c2]*2 < (vec[c3]*3 < vec[c5]*5 ? vec[c3]*3 : vec[c5]*5) ? vec[c2]*2 : (vec[c3]*3 < vec[c5]*5 ? vec[c3]*3 : vec[c5]*5);
+		if (vec[i] == vec[c2] * 2)c2++;
+		if (vec[i] == vec[c3] * 3)c3++;
+		if (vec[i] == vec[c5] * 5)c5++;
+	}
+	return vec[n - 1];
+}
+
+//Given a column title as appear in an Excel sheet, return its corresponding column number.
+int titleToNumber(string s) 
+{
+	string::size_type beg = s.find_first_not_of(' ');
+	s.erase(s.begin(), s.begin() + beg);
+	string::size_type end = s.find_last_not_of(' ');
+	s.erase(s.begin() + end+1, s.end());
+	int res = 0;
+	for (string::iterator it = s.begin(); it != s.end(); it++)
+	{
+		res = res * 26 + (*it - 'A')+1 ;
+	}
+	return res; 
+}
+
+//Given a positive integer, return its corresponding column title as appear in an Excel sheet.
+string convertToTitle(int n) {
+	vector<char>vec;
+	while (n > 0)
+	{
+		if (n % 26 == 0)
+		{
+			vec.push_back('Z');
+			n -= 26;
+		}
+		else
+			vec.push_back(n % 26+'A'-1);
+		n = n/26;
+	}
+	string str;
+	for (vector<char>::reverse_iterator ch = vec.rbegin(); ch != vec.rend(); ch++)
+		//str.append(1, *ch);
+		str.insert(str.end(), *ch);
+	return str;
+}
+
+//Since we are not allowed to rob two adjacent houses, we keep two variables pre and cur.During the i - th loop, pre records the maximum profit that we do not rob the i - 1 - th house and thus the current house(the i - th house) can be robbed while cur records the profit that we have robbed the i - 1 - th house.
+int rob(vector<int>& nums) {
+	int pre = 0, cur = 0;
+	for (vector<int>::iterator it = nums.begin(); it != nums.end(); it++)
+	{
+		int temp = pre + *it > cur ? pre + *it : cur;
+		pre = cur;
+		cur = temp;
+	}
+	return cur;
+}
+
+
+//https://leetcode.com/problems/valid-sudoku/
+//Determine if a Sudoku is valid. The Sudoku board could be partially filled, where empty cells are filled with the character '.'.
+bool isValidSudoku(vector<vector<char>>& board)
+{
+	char arr[128] = { 0 };
+	for (vector<vector<char>>::const_iterator row = board.begin(); row != board.end(); row++)
+	{
+		fill(arr + '0', arr + '9'+1, 0);
+		for (vector<char>::const_iterator col = row->begin(); col != row->end(); col++)
+		{
+			arr[*col]++;
+			if (*col != '.'&&arr[*col] > 1)return false;
+		}
+	}
+	for (size_t row = 0; row != 9; row++)
+	{
+		fill(arr + '0', arr + '9' + 1, 0);
+		for (size_t col = 0; col != 9; col++)
+		{
+			arr[board[col][row]]++;
+			if (board[col][row] != '.'&&arr[board[col][row]] > 1)return false;
+		}
+	}
+	for (size_t row = 0; row != 3; row++)
+	{
+		for (size_t col = 0; col != 3; col++)
+		{
+			fill(arr + '0', arr + '9' + 1, 0);
+			for (size_t i = 0; i < 3; i++)
+			{
+				for (size_t j = 0; j < 3; j++)
+				{
+					arr[board[row * 3 + i][col * 3 + j]]++;
+					if (board[row * 3 + i][col * 3 + j] !='.'&& arr[board[row * 3 + i][col * 3 + j]] > 1)return false;
+				}
+			}
+		}
+	}
+	return true;
+}
 #endif // !MATH_H

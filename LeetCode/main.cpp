@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include<iomanip>
 #include<cstdlib>
 #include<ctime>
 #include<vector>
@@ -23,10 +24,10 @@
 //#include"BinaryTree.h"
 //#include"findKthLargest.h"
 //#include"stack.h"
-#include"math.h"
+//#include"math.h"
 //#include"array.h"
 //#include"sort.h"
-//#include"string.h"
+#include"string.h"
 
 #define random(x) rand()%(x)
 const unsigned int SIZE = 15;
@@ -64,11 +65,8 @@ int main(int argc, char*argv[])
 	clock_t start, stop;
 	start = clock();//启动计时器
 	/*算法调用处*/
-
-	//system("pause");
-	string str=getPermutation(4, 16);
-	cout << endl << str << endl;
-
+	int pos=strStr("", "");
+	cout << pos << endl;
 
 	stop = clock();//计时器停止
 	double timespan = (double)(stop - start) / CLK_TCK;//算法用时(以秒为单位)

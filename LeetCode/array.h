@@ -242,9 +242,14 @@ vector<int> productExceptSelf(vector<int>& nums)
 		return output;
 	}
 }
+
+
+//Given a sorted array and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+int searchInsert(vector<int>& nums, int target)
+{
+
+}
 //Write an efficient algorithm that searches for a value in an m x n matrix.This matrix has the following properties :
-//
-//
 //•Integers in each row are sorted from left to right.
 //•The first integer of each row is greater than the last integer of the previous row.
 //bool searchMatrix(vector<vector<int>>& matrix, int target)

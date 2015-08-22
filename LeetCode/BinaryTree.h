@@ -9,6 +9,7 @@
 #include<queue>
 #include<iterator>
 #include<map>
+#include<string>
 using namespace std;
 
 //Definition for singly-linked list.
@@ -1326,6 +1327,25 @@ bool isValidBST(TreeNode* root)
 	}
 }
 
+//Given a binary tree, return all root-to-leaf paths. 
+vector<string> binaryTreePaths(TreeNode* root) {
+	if (root == nullptr)return vector<string>();
+	if (root->left == nullptr&&root->right == nullptr)return vector<string>(1, to_string(root->val));
+	vector<string>left = binaryTreePaths(root->left);
+	vector<string>right = binaryTreePaths(root->right);
+	for (vector<string>::iterator it = left.begin(); it != left.end(); it++)
+	{
+		(*it).insert(0, to_string(root->val).append("->"));
+	}
+	for (vector<string>::iterator it = right.begin(); it != right.end(); it++)
+	{
+		(*it).insert(0, to_string(root->val).append("->"));
+	}
+	vector<string>res;
+	copy(left.begin(), left.end(), inserter(res, res.end()));
+	copy(right.begin(), right.end(), inserter(res, res.end()));
+	return res;
+}
 
 //Binary Tree Maximum Path Sum 
 int maxPathSum(TreeNode* root) 
